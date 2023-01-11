@@ -1,13 +1,21 @@
 from keras.models import load_model
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
+
 import nltk
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
 from nltk.corpus import stopwords
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+
+import tensorflow as tf
 import re
 import demoji
 import contractions
 import inflect
+from pathlib import Path
 
 def number_to_text(data): # write numbers as text and return (...12... => ...twelve...)
   temp_str = data.split()
@@ -90,7 +98,8 @@ def predict(input_text, model,label):
 def label_lstm(txt, labels):
   final_labels=[]
   for label in labels:
-    model_path = f'\models\lstm\{label}model'
+    model_path = str(Path().absolute()) + "\models\lstm\\" + str(label) + "model"
+    print(model_path)
     model = load_model(model_path)
     if predict(txt,model,label) != None:
       final_labels.append(predict(txt,model,label))
@@ -102,4 +111,6 @@ labels = ["fraud","hacker groups","government", "corporation", "unrelated", "dar
           "security concepts", "security products", "network security", "cyberwar", "geopolitical", "data breach",
           "vulnerability", "platform", "cyber attack"]
 
-label_lstm(txt, labels)
+
+#label_list = label_lstm(txt, labels)
+#print("====LABEL LIST ====", label_list)
