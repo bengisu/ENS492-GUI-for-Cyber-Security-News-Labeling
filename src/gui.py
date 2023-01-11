@@ -30,7 +30,7 @@ def get_which_model(is_all, is_bert, is_lstm, is_cnn):
 def tags_to_string():
     str = ""
     for tag in tags:
-        str += tag + " "
+        str += tag + ", "
     return str
 
 def update_tag_results_gui():
@@ -67,7 +67,7 @@ while True:
         for key in values:
             print(key, ' = ',values[key])
     if event == 'Run':
-        tags = get_tags_news(values['news_text'], get_which_model(values['is_all'], values['is_bert'], values['is_lstm'], values['is_cnn']))
+        tags = get_tags_news([values['news_text']], get_which_model(values['is_all'], values['is_bert'], values['is_lstm'], values['is_cnn']))
         #tags = ["zart", "zort"]
         
         update_tag_results_gui()

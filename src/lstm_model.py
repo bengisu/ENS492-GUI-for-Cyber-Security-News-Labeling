@@ -4,11 +4,11 @@ from keras.utils import pad_sequences
 
 import nltk
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
-from nltk.corpus import stopwords
 nltk.download('stopwords')
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
+from nltk.corpus import stopwords
 
 import tensorflow as tf
 import re
