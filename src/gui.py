@@ -1,15 +1,20 @@
 import PySimpleGUI as sg 
 from lstm_model import label_lstm
+from cnn_model import label_cnn
 
-labels =  ["fraud","hacker groups","government", "corporation", "unrelated", "darknet", "cyber defense", "hacking", 
-          "security concepts", "security products", "network security", "cyberwar", "geopolitical", "data breach",
-          "vulnerability", "platform", "cyber attack"]
+# labels =  ["fraud","hacker groups","government", "corporation", "unrelated", "darknet", "cyber defense", "hacking", 
+#           "security concepts", "security products", "network security", "cyberwar", "geopolitical", "data breach",
+#           "vulnerability", "platform", "cyber attack"]
 
 tags = []
 
 def get_tags_news(news_text, which_model):
     if which_model == 2:
-        label_list = label_lstm(news_text, labels)
+        label_list = label_lstm([news_text])
+        print(label_list)
+        return label_list
+    if which_model == 3:
+        label_list = label_cnn([news_text])
         print(label_list)
         return label_list
             
@@ -31,6 +36,7 @@ def tags_to_string():
     str = ""
     for tag in tags:
         str += tag + ", "
+    str = str[:-2]
     return str
 
 def update_tag_results_gui():
@@ -67,9 +73,12 @@ while True:
         for key in values:
             print(key, ' = ',values[key])
     if event == 'Run':
-        tags = get_tags_news([values['news_text']], get_which_model(values['is_all'], values['is_bert'], values['is_lstm'], values['is_cnn']))
-        #tags = ["zart", "zort"]
-        
+        try:
+            tags = get_tags_news(values['news_text'], get_which_model(values['is_all'], values['is_bert'], values['is_lstm'], values['is_cnn']))
+        except:
+            tags = ["An error occured. Please check your inputs and try again"]
+        else:
+            tags = ["An error occured. Please check your inputs and try again"]
         update_tag_results_gui()
     if event == sg.WIN_CLOSED or event == 'Exit':     # If user closed window with X or if user clicked "Exit" button then exit
       break
