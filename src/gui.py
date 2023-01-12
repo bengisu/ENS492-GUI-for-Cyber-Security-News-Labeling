@@ -36,9 +36,10 @@ def update_tag_results_gui():
     tag_results_obj.update(value=tags_to_string())
     tag_results_obj.update(disabled = True)
     
-sg.theme('System Default 1')  # Let's set our own color theme
-
-# STEP 1 define the layout
+### MAIN STARTS HERE ###
+    
+sg.theme('System Default 1')#color theme
+#define the layout
 layout = [ 
             [sg.Text('Please select the machine learning model(s) you want to generate the tags with:')],
             [sg.Radio('BERT', "MLModelRadio", default=True, size=(10,1), k='is_bert'), sg.Radio('LSTM', "MLModelRadio", default=True, size=(10,1), k='is_lstm'),
@@ -50,12 +51,12 @@ layout = [
             [sg.Button('Run'), sg.Button('Exit')]
          ]
 
-#STEP 2 - create the window
+#create the window
 window = sg.Window('Cyber Security News Tagger', layout)
 
 tag_results_obj = window['tag_results_gui']
 
-# STEP3 - the event loop
+#the event loop
 while True:
     event, values = window.read()   # Read the event that happened and the values dictionary
     
