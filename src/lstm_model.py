@@ -95,7 +95,7 @@ def predict(input_text, model,label):
     if y_pred_train>THRESHOLD:
       return label
 
-def label_lstm(txt, labels):
+def label_lstm(txt):
   final_labels=[]
   for label in labels:
     model_path = str(Path().absolute()) + "\models\lstm\\" + str(label) + "model"
