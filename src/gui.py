@@ -2,10 +2,6 @@ import PySimpleGUI as sg
 from lstm_model import label_lstm
 from cnn_model import label_cnn
 
-# labels =  ["fraud","hacker groups","government", "corporation", "unrelated", "darknet", "cyber defense", "hacking", 
-#           "security concepts", "security products", "network security", "cyberwar", "geopolitical", "data breach",
-#           "vulnerability", "platform", "cyber attack"]
-
 tags = []
 
 def get_tags_news(news_text, which_model):
@@ -17,10 +13,6 @@ def get_tags_news(news_text, which_model):
         label_list = label_cnn([news_text])
         print(label_list)
         return label_list
-            
-    #print("news text:", news_text)
-    #tags = ["fraud", "zort"]
-    #return tags
 
 def get_which_model(is_all, is_bert, is_lstm, is_cnn):
     if is_all:
