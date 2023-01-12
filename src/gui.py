@@ -41,10 +41,10 @@ def update_tag_results_gui():
 sg.theme('System Default 1')#color theme
 #define the layout
 layout = [ 
-            [sg.Text('Please select the machine learning model(s) you want to generate the tags with:')],
+            [sg.Text('Select the machine learning model(s) you want to generate the tags with:')],
             [sg.Radio('BERT', "MLModelRadio", default=True, size=(10,1), k='is_bert'), sg.Radio('LSTM', "MLModelRadio", default=True, size=(10,1), k='is_lstm'),
              sg.Radio('CNN', "MLModelRadio", default=True, size=(10,1), k='is_cnn'), sg.Radio('All Models', "MLModelRadio", default=True, size=(10,1), k='is_all')],
-            [sg.Text("Please enter the new's text:")],
+            [sg.Text("Enter the new's text:")],
             [sg.Multiline(size=(60,20), expand_x=True, expand_y=True, k='news_text')],
             [sg.Text("Tags:")],
             [sg.Multiline(size=(20,5), expand_x=True, expand_y=True, k='tag_results_gui', disabled = True)],
@@ -66,13 +66,14 @@ while True:
         for key in values:
             print(key, ' = ',values[key])
     if event == 'Run':
+        tags = ["Calculating, please wait..."]
+        update_tag_results_gui()
         try:
             tags = get_tags_news(values['news_text'], get_which_model(values['is_all'], values['is_bert'], values['is_lstm'], values['is_cnn']))
+            update_tag_results_gui()
         except:
             tags = ["An error occured. Please check your inputs and try again"]
-        else:
-            tags = ["An error occured. Please check your inputs and try again"]
-        update_tag_results_gui()
+            update_tag_results_gui()
     if event == sg.WIN_CLOSED or event == 'Exit':     # If user closed window with X or if user clicked "Exit" button then exit
       break
     

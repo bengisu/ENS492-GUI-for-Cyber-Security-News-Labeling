@@ -15,6 +15,8 @@ import re
 import demoji
 import contractions
 import inflect
+import sys
+import os
 from pathlib import Path
 
 def number_to_text(data): # write numbers as text and return (...12... => ...twelve...)
@@ -66,7 +68,7 @@ def preprocess_text(text):
     return " ".join(lemmatized_words)
 
 def label_model(input_text, model,label):
-    THRESHOLD= 0.6
+    THRESHOLD= 0.7
     
     lst=[]
     #Preprocess text
@@ -93,11 +95,20 @@ def label_model(input_text, model,label):
     if y_pred_train>THRESHOLD:
       return label
 
+def resourcePath(relativePath):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        basePath = sys._MEIPASS
+    except Exception:
+        basePath = os.path.abspath(".")
+
+    return os.path.join(basePath, relativePath)
 
 def label_cnn(txt):
   predicted_labels=[]
   for label in labels:
-    model_path = str(Path().absolute()) + "\models\cnn\\" + str(label) + " model"
+    model_path = resourcePath(str(Path().absolute()) + "\models\cnn\\" + str(label) + " model")
     model = load_model(model_path)
     if label_model(txt,model,label) != None:
       predicted_labels.append(label_model(txt,model,label))
@@ -112,5 +123,5 @@ labels = ['fraud', 'hacker groups', 'corporation',
        'security products', 'network security', 'cyberwar', 'geopolitical',
        'data breach', 'vulnerability', 'platform', 'cyber attack']
 
-#label_list = label_cnn(txt2)
-#print("====LABEL LIST ====", label_list)
+# label_list = label_cnn(txt2)
+# print("====LABEL LIST ====", label_list)

@@ -15,6 +15,8 @@ import re
 import demoji
 import contractions
 import inflect
+import sys
+import os
 from pathlib import Path
 
 def number_to_text(data): # write numbers as text and return (...12... => ...twelve...)
@@ -94,11 +96,21 @@ def predict(input_text, model,label):
     print( y_pred_train)
     if y_pred_train>THRESHOLD:
       return label
+    
+def resourcePath(relativePath):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        basePath = sys._MEIPASS
+    except Exception:
+        basePath = os.path.abspath(".")
+
+    return os.path.join(basePath, relativePath)
 
 def label_lstm(txt):
   final_labels=[]
   for label in labels:
-    model_path = str(Path().absolute()) + "\models\lstm\\" + str(label) + "model"
+    model_path = resourcePath(str(Path().absolute()) + "\models\lstm\\" + str(label) + "model")
     print(model_path)
     model = load_model(model_path)
     if predict(txt,model,label) != None:
