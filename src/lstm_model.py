@@ -110,7 +110,7 @@ def resourcePath(relativePath):
 def label_lstm(txt):
   final_labels=[]
   for label in labels:
-    model_path = resourcePath(str(Path().absolute()) + "\models\lstm\\" + str(label) + "model")
+    model_path = str(Path().absolute()) + "\models\lstm\\" + str(label) + "model"
     print(model_path)
     model = load_model(model_path)
     if predict(txt,model,label) != None:
