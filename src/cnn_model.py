@@ -108,7 +108,7 @@ def resourcePath(relativePath):
 def label_cnn(txt):
   predicted_labels=[]
   for label in labels:
-    model_path = resourcePath(str(Path().absolute()) + "\models\cnn\\" + str(label) + " model")
+    model_path = str(Path().absolute()) + "\models\cnn\\" + str(label) + " model"
     model = load_model(model_path)
     if label_model(txt,model,label) != None:
       predicted_labels.append(label_model(txt,model,label))
