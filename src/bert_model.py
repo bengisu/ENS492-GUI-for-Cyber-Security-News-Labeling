@@ -6,11 +6,13 @@ import re, string
 import contractions
 from transformers import AutoTokenizer
 import torch
-from torch.optim import AdamW
-from torch.utils.data import TensorDataset, SequentialSampler, DataLoader
+#from torch.optim import AdamW
+#from torch.utils.data import TensorDataset, SequentialSampler, DataLoader
 from transformers import BertTokenizer, BertForSequenceClassification, TrainingArguments, Trainer, EvalPrediction, AutoTokenizer
-from sklearn.metrics import f1_score, roc_auc_score, accuracy_score
+#from sklearn.metrics import f1_score, roc_auc_score, accuracy_score
 import numpy as np
+import os
+from pathlib import Path
 
 nltk.download('punkt')
 nltk.download('wordnet')
@@ -128,20 +130,38 @@ def bert_interface(model, text):
 
   logits = model(input_ids, attention_mask)[0]
   prob = softmax(logits).detach().numpy()[0][0]
-  return prob > 0.5
+  return prob > 0.7
+
+def get_immediate_subdirectories(a_dir):
+    return [name for name in os.listdir(a_dir)
+            if os.path.isdir(os.path.join(a_dir, name))]
 
 def label_bert(text):
-  return text
+  #all_models_path = get_immediate_subdirectories(str(Path().absolute()) + "/src/models/bert")
+  pred_list = []
+  for tag in labels2:
+    model = BertForSequenceClassification.from_pretrained(str(Path().absolute()) + "/src/models/bert/" + tag)
+    if (bert_interface(model, text)):
+      print("0")
+      pred_list.append(tag)
+  
+  return pred_list
 
-model = BertForSequenceClassification.from_pretrained("/content/drive/MyDrive/ENS 492 Models/11-01-23/bert-model-outputs_network security/checkpoint-5365")
+#model = BertForSequenceClassification.from_pretrained("/content/drive/MyDrive/ENS 492 Models/11-01-23/bert-model-outputs_network security/checkpoint-5365")
 
+labels = ['fraud', 'hacker groups', 'corporation',
+       'darknet', 'cyber defense', 'security concepts',
+       'security products', 'network security', 'cyberwar', 'geopolitical',
+       'data breach', 'vulnerability', 'platform', 'cyber attack']
+
+labels2 = ["network security", "vulnerability"]
 # 0s
 text = "Microsoft, Adobe Exploits Top List of Crooks’ Wish List https://threatpost.com/top-microsoft-adobe-exploits-list/166241/ You can’t possibly patch all CVEs, so focus on the exploits crooks are willing to pay for, as tracked in a study of the underground exploit market."
 # text = "Fujitsu SaaS Hack Sends Govt. of Japan Scrambling https://threatpost.com/fujitsu-saas-hack-japan-scrambling/166517/ Tech giant disables ProjectWEB cloud-based collaboration platform after threat actors gained access and nabbed files belonging to several state entities."
 # text = "ASDSDAD deneme deneme"
-
+#label_bert(text, labels2)
 # 1s
 # text = '‼ CVE-2021-20600 ‼ Uncontrolled resource consumption in MELSEC iQ-R series C Controller Module R12CCPU-V all versions allows a remote unauthenticated attacker to cause a denial-of-service (DoS) condition by sending a large number of packets in a short time while the module starting up. 📖 Read via "National Vulnerability Database".'
 # text = "WireX DDoS botnet admin charged for attacking hotel chain The US Department of Justice charged the admin of the WireX Android botnet for targeting an American multinational hotel chain in a distributed denial-of-service (DDoS) attack."
 
-bert_interface(model, text)
+#bert_interface(model, text)

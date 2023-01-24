@@ -1,10 +1,15 @@
 import PySimpleGUI as sg 
 from lstm_model import label_lstm
 from cnn_model import label_cnn
+from bert_model import label_bert
 
 tags = []
 
 def get_tags_news(news_text, which_model):
+    if which_model == 1:
+        label_list = label_bert(news_text)
+        print(label_list)
+        return label_list
     if which_model == 2:
         label_list = label_lstm([news_text])
         print(label_list)
@@ -74,6 +79,7 @@ while True:
         except:
             tags = ["An error occured. Please check your inputs and try again"]
             update_tag_results_gui()
+        #calismazsa except ve tryi kaldirip dene
     if event == sg.WIN_CLOSED or event == 'Exit':     # If user closed window with X or if user clicked "Exit" button then exit
       break
     
