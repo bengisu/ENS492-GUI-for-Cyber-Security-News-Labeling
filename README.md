@@ -1,6 +1,14 @@
 # ENS492-GUI-for-Cyber-Security-News-Labeling
 
 Setup:
+  
+  To add your models: Add models to ./src/models/"your ML model name"/...
+    
+    Ex: .src/models/lstm/fraud model
+    
+    Ex: .src/models/lstm/cyber attack model
+    
+    ...
 
   run "pip install -r requirements1.txt"
 
